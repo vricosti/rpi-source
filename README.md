@@ -1,12 +1,12 @@
-There is a kernel-headers Raspbian package now:
+There is a kernel-headers Raspberry Pi OS package now:
 https://www.raspberrypi.org/documentation/linux/kernel/headers.md
 
 rpi-source is helpful if you use rpi-update kernels or want to build an in-kernel module.
 
 ------
 
-rpi-source installs the kernel source used to build rpi-update kernels and the kernel on the Raspian image.  
-This makes it possible to build loadable kernel modules.  
+rpi-source installs the kernel source used to build rpi-update kernels and the kernel on the Raspberry Pi OS image.
+This makes it possible to build loadable kernel modules.
 It is not possible to build modules that depend on missing parts that need to be built into the kernel proper (bool in Kconfig).
 
 The script uses sudo internally when self-updating and when making the links */lib/modules/$(uname -r)/{build,source}*
