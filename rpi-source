@@ -27,14 +27,14 @@ DISK_USAGE_MB = 900
 PROCESSOR_TYPES = range(0, 4)
 PROCESSOR_TYPES_NAMES = ['BCM2835', 'BCM2836', 'BCM2837', 'BCM2711']
 
-wiki = "https://github.com/notro/rpi-source/wiki"
-script_repo = "https://github.com/notro/rpi-source"
+help = "https://github.com/RPi-Distro/rpi-source/blob/master/README.md"
+script_repo = "https://github.com/RPi-Distro/rpi-source"
 
 update_tag_file = os.path.join(os.environ.get('HOME'), '.rpi-source')
 argv = sys.argv[:]
 
 parser = argparse.ArgumentParser(description='Raspberry Pi kernel source installer',
-                                  epilog="For more help see: %s" % wiki)
+                                  epilog="For more help see: %s" % help)
 parser.add_argument("-d", "--dest", help="Destination directory. Default is $HOME",
                     default=os.environ.get('HOME'))
 parser.add_argument("--nomake", help="Don't run 'make modules_prepare'",
@@ -82,7 +82,7 @@ def warn(str):
         print("\n !!! %s" % str)
 
 def fail(str):
-    sys.stderr.write("ERROR:\n%s\n\nHelp: %s\n" % (str, wiki))
+    sys.stderr.write("ERROR:\n%s\n\nHelp: %s\n" % (str, help))
     exit(1)
 
 def sh(cmd):
@@ -163,7 +163,7 @@ def do_update():
     # MOD: replace current script; do not assume script is located at /usr/bin/rpi-source; also keep ownership and permissions
     script_name = argv[0]
     info("Updating rpi-source")
-    sh("sudo wget %s https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O %s" % ("-q" if args.quiet else "", script_name))
+    sh("sudo wget %s https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source -O %s" % ("-q" if args.quiet else "", script_name))
     update_tag()
     info("Restarting rpi-source")
     argv.insert(0, sys.executable)
@@ -317,7 +317,7 @@ def get_processor_type():
 
 def check_bc():
     if not os.path.exists('/usr/bin/bc'):
-        fail("bc is NOT installed. Needed by 'make modules_prepare'. On Raspbian, run 'sudo apt-get install bc' to install it.")
+        fail("bc is NOT installed. Needed by 'make modules_prepare'. On Raspbian, run 'sudo apt install bc' to install it.")
 
 ##############################################################################
 
@@ -412,10 +412,10 @@ if not args.nomake:
     sh("cd %s && make modules_prepare %s" % (linux_symlink, (" > /dev/null" if args.quiet else "")))
 
 if not os.path.exists('/usr/include/ncurses.h'):
-    info("ncurses-devel is NOT installed. Needed by 'make menuconfig'. On Raspbian sudo apt-get install libncurses5-dev")
+    info("ncurses-devel is NOT installed. Needed by 'make menuconfig'. On Raspbian,\nrun 'sudo apt install libncurses5-dev' to install it.")
 
 if args.delete:
     info("Delete downloaded archive")
     sh("rm %s" % linux_tar)
 
-info("Help: %s" % wiki)
+info("Help: %s" % help)

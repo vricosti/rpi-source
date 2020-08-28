@@ -15,7 +15,7 @@ The script uses sudo internally when self-updating and when making the links */l
 
 Dependencies
 ```text
-sudo apt-get install git bc bison flex libssl-dev
+sudo apt install git bc bison flex libssl-dev
 ```
 
 Install
@@ -33,12 +33,12 @@ rpi-source
 This library is needed when running 'make menuconfig'
 
 ```text
- *** ncurses-devel is NOT installed. Needed by 'make menuconfig'. On Debian: apt-get install ncurses-dev
+ *** ncurses-devel is NOT installed. Needed by 'make menuconfig'. On Raspberry Pi OS: sudo apt install ncurses-dev
 ```
 
 Install prerequisites
 ```text
-$ sudo apt-get install libncurses5-dev
+$ sudo apt install libncurses5-dev
 ```
 
 ## Misc
