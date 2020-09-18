@@ -1,0 +1,6 @@
+.debhelper/
+debhelper-build-stamp
+files
+rpi-source.1
+rpi-source.substvars
+rpi-source/
