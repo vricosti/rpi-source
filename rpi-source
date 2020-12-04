@@ -111,7 +111,10 @@ def download(url):
     try:
         res = urllib2.urlopen(url).read()
     except urllib2.HTTPError, e:
-        fail("Couldn't download %s, HTTPError: %s" % (url, e.code))
+        fail(
+            "Couldn't download %s, HTTPError: %s\n\n%s"
+            % (url, e.code, json.dumps(json.load(e), indent=4))
+        )
     except urllib2.URLError, e:
         fail("Couldn't download %s, URLError: %s" % (url, e.args))
     return res
