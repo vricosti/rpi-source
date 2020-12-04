@@ -63,6 +63,8 @@ parser.add_argument("--skip-update", help="Skip checking for update to this scri
                     action="store_true")
 parser.add_argument("--tag-update", help="Tell the update mechanism that this is the latest version of the script",
                     action="store_true")
+parser.add_argument("--download-only", help="Just download the kernel tarball, without unpacking source and installing it",
+                    action="store_true",)
 args = parser.parse_args()
 
 
@@ -366,6 +368,10 @@ if not os.path.exists(linux_tar):
     sh("wget %s -O %s https://github.com/raspberrypi/linux/archive/%s.tar.gz" % (("-q" if args.quiet else ""), linux_tar, kernel.git_hash))
 else:
     info("Download kernel source: Already downloaded %s" % linux_tar)
+
+if args.download_only:
+    info("Downloaded kernel source tarball: %s" % linux_tar)
+    quit()
 
 info("Unpack kernel source")
 if args.quiet:
