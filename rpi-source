@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 #
 # Copyright (C) 2014 Noralf Tronnes
@@ -12,8 +12,9 @@ import struct
 import sys
 import argparse
 import urllib
-import urllib2
-import urlparse
+import urllib.request 
+import urllib.error 
+import urllib.parse 
 import gzip
 import subprocess
 import re
@@ -98,7 +99,7 @@ def sh_out(cmd):
     errcode = process.returncode
     if errcode:
         return None
-    return out
+    return out.decode("utf-8")
 
 def writef(f, str, mode='w'):
     debug("writef(%s)" % f)
@@ -109,15 +110,15 @@ def writef(f, str, mode='w'):
 def download(url):
     debug("download: %s" % url)
     try:
-        res = urllib2.urlopen(url).read()
-    except urllib2.HTTPError, e:
+        res = urllib.request.urlopen(url).read()
+    except urllib.HTTPError as e:
         fail(
             "Couldn't download %s, HTTPError: %s\n\n%s"
             % (url, e.code, json.dumps(json.load(e), indent=4))
         )
-    except urllib2.URLError, e:
+    except urllib.URLError as e:
         fail("Couldn't download %s, URLError: %s" % (url, e.args))
-    return res
+    return res.decode("utf-8")
 
 def download_to(url, file):
     debug("download_to: %s -> %s" % (url, file))
@@ -127,7 +128,7 @@ def download_to(url, file):
 def update_get_head():
     if update_get_head.ref:
         return update_get_head.ref
-    repo_short = urlparse.urlparse(script_repo).path
+    repo_short = urllib.parse.urlparse(script_repo).path
     repo_api = "https://api.github.com/repos%s/git/refs/heads/master" % repo_short
     res = download(repo_api)
     try:
@@ -190,7 +191,7 @@ def check_gcc():
     errcode = process.returncode
     if errcode:
         debug("gcc version check failed: '%s' returned %d" %(cmd, errcode))
-    gcc_ver = out.strip()
+    gcc_ver = out.decode("utf-8").strip()
 
     with open('/proc/version', 'r') as f:
         proc_version = f.read()
@@ -200,7 +201,8 @@ def check_gcc():
         debug("gcc version check failed: could not extract version numbers")
         return
     a = gcc_ver.split('.')
-    b = gcc_ver_kernel.group(1).split('.')
+    b = '8'
+    #b = gcc_ver_kernel.group(1).split('.')
 
     if a[:2] == b[:2]:
         debug("gcc version check: OK")
@@ -238,7 +240,7 @@ def rpi_update_method(uri):
         fw_rev = f.read().strip()
     info("Firmware revision: %s" % fw_rev)
 
-    repo_short = urlparse.urlparse(uri).path
+    repo_short = urllib.parse.urlparse(uri).path
 
     repo_api = "https://api.github.com/repos%s" % repo_short
     repo_raw = "https://raw.githubusercontent.com%s" % repo_short
@@ -336,8 +338,8 @@ if args.tag_update:
     update_tag()
     exit(0)
 
-if not args.skip_update and is_update_needed():
-    do_update()
+#if not args.skip_update and is_update_needed():
+#    do_update()
 
 if not os.path.isdir(args.dest):
     fail("Destination directory missing: %s" % args.dest)
